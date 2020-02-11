@@ -1,0 +1,14 @@
+
+.classpath
+
+.project
+
+.settings/org.eclipse.core.resources.prefs
+
+.settings/
+
+tokens/
+
+target/classes/META-INF/
+
+*.class
