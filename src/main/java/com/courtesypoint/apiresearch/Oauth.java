@@ -1,6 +1,9 @@
 package com.courtesypoint.apiresearch;
 
+import java.awt.Desktop;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Base64;
 
 import com.alibaba.fastjson.JSON;
@@ -10,10 +13,19 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 
 public class Oauth {
     public static void main( String[] args ) throws IOException, UnirestException {
-    	String token = Oauth.getCmsResourceGrantPassword();
+    	
+//    	HttpResponse<String> response = Unirest.get("https://accounts.google.com/o/oauth2/auth?client_id=91673408389-cd1djp1kbbkkm01i1c5sqcc4tiso7mp2.apps.googleusercontent.com&response_type=code&state=5ca75bd30&redirect_uri=http://localhost:8080&scope=https://www.googleapis.com/auth/calendar")
+//    			.asString();
+    	Desktop d = Desktop.getDesktop();
+    	try {
+    	    d.browse(new URI("https://accounts.google.com/o/oauth2/auth?client_id=91673408389-cd1djp1kbbkkm01i1c5sqcc4tiso7mp2.apps.googleusercontent.com&response_type=code&state=5ca75bd30&redirect_uri=http://localhost:8080&scope=https://www.googleapis.com/auth/calendar"));
+    	} catch (IOException | URISyntaxException e2) {
+    	    e2.printStackTrace();
+    	}
+    	String token = Oauth.getAccessToken("authorizationcode");
     }
     
-    private static String getCmsResourceGrantPassword() {
+    private static String getAccessToken(String code) {
     	String token = null; //CptiHttpRequest.getCmsResourceCredentials("Sample", "1234");
 		String clientId = "91673408389-cd1djp1kbbkkm01i1c5sqcc4tiso7mp2.apps.googleusercontent.com";//clientId
 	    String clientSecret = "bF19myL6EwWjdeFeIcrwDjQn";//client secret
@@ -24,14 +36,14 @@ public class Oauth {
         try {
             String url = "https://accounts.google.com/o/oauth2/token";
             response = Unirest.post(url)
-                    .header("authorization", "Basic "+authentication)
-                    .header("cache-control", "no-cache")
+                    .header("Authorization", "Basic "+authentication)
+                    .header("Cache-Control", "no-cache")
                     .header("Content-Type", "application/x-www-form-urlencoded")
                     .field("grant_type", "authorization_code")
                     .field("client_id", clientId)
 //                    .field("state", "5ca75bd30")
                     .field("redirect_uri", "http://localhost:8080")
-                    .field("code", "4/wQENNdJVO6Fl6_p6npmmfGJ_4S-VQ_Kjt7mQZA_RVKDihhJV26mz49aowAij2U3lXIaiU4daYSKFck_wzy_ujj0")
+                    .field("code", code)
                     .asString();
             if (response.getStatus() >= 200 && response.getStatus() < 400) {
             	token = JSON.parseObject(response.getBody()).get("access_token").toString();
