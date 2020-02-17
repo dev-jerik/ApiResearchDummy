@@ -17,7 +17,8 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
+import kong.unirest.UnirestException;
+
 
 public class MainFrame extends JFrame {
 

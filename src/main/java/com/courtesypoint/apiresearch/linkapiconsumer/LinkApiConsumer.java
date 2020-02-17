@@ -4,12 +4,11 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Base64;
 
-import com.alibaba.fastjson.JSON;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
+import kong.unirest.HttpResponse;
+import kong.unirest.JsonNode;
+import kong.unirest.Unirest;
+import kong.unirest.UnirestException;
 
 public class LinkApiConsumer {
 	
@@ -30,14 +29,11 @@ public class LinkApiConsumer {
 	public static String getGoogleAccessToken(String linkApiAccessToken) {
 		String url = linkApiUrl+ "/api/google/getAccesToken";
 		String googleAccessToken = null;
-        HttpResponse<String> response;
 		try {
-			response = Unirest.get(url)
+			googleAccessToken = Unirest.get(url)
 					.queryString("access_token", linkApiAccessToken)
-					.asString();
-			if (response.getStatus() == 200) {
-	        	googleAccessToken = response.getBody().toString();
-	        }
+					.asString()
+					.mapBody(String::valueOf);
 		} catch (UnirestException e) {
 			e.printStackTrace();
 		}
@@ -47,28 +43,26 @@ public class LinkApiConsumer {
 	
 	public static String getLinkApiAccessToken(String username, String password) throws UnirestException {
 		String url = linkApiUrl +"/oauth/token";
-		String accessToken = connectWithGrantTypePassword(username, password, "cmsApp", url);
+		String accessToken = connectWithGrantTypePassword(username, password, "cmsApp", "", url);
 		System.out.println("Link API Access Token: " + accessToken);
 		return accessToken;
 	}
 	
-	private static String connectWithGrantTypePassword(String username, String password, String clientId, String url) throws UnirestException {
-		HttpResponse<String> response;
-	    String clientSecret = "";
-	    String auth = clientId + ":" + clientSecret;
-	    String authentication = Base64.getEncoder().encodeToString(auth.getBytes());
+	private static String connectWithGrantTypePassword(String username, String password, String clientId, String clientSecret, String url) throws UnirestException {
+		HttpResponse<JsonNode> response;
 	    String token = null;
         
         response = Unirest.post(url)
-                .header("Authorization", "Basic "+authentication)
                 .header("Cache-Control", "no-cache")
+                .basicAuth(clientId, clientSecret)
                 .field("grant_type", "password")
                 .field("client_id", clientId)
                 .field("username", username)
                 .field("password", password)
-                .asString();
+                .asJson();
+        
         if (response.getStatus() == 200) {
-        	token = JSON.parseObject(response.getBody()).get("access_token").toString();
+        	token = (String) response.getBody().getObject().get("access_token");
         }
         
 		return token;

@@ -3,10 +3,11 @@ package com.courtesypoint.apiresearch;
 import java.io.IOException;
 import java.util.Base64;
 
-import com.alibaba.fastjson.JSON;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
+import kong.unirest.HttpResponse;
+import kong.unirest.JsonNode;
+import kong.unirest.Unirest;
+import kong.unirest.UnirestException;
+import kong.unirest.json.JSONObject;
 
 /**
  * Hello world!
@@ -38,7 +39,7 @@ public class App {
 	    String auth = clientId + ":" + clientSecret;
 	    String authentication = Base64.getEncoder().encodeToString(auth.getBytes());
        
-        HttpResponse<String> response;
+        HttpResponse<JsonNode> response;
         try {
             String url = "http://localhost:8080/link/oauth/token";
             response = Unirest.post(url)
@@ -47,14 +48,15 @@ public class App {
                     .field("grant_type", "password")
                     .field("username", "Sample")
                     .field("password", "1234")
-                    .asString();
+                    .asJson();
             if (response.getStatus() >= 200 && response.getStatus() < 400) {
-            	token = JSON.parseObject(response.getBody()).get("access_token").toString();
+            	JSONObject jsonObject = response.getBody().getObject();
+            	token = jsonObject.get("access_token").toString();
             	System.out.println("access_token: " + token);
-            	System.out.println("token_type: " + JSON.parseObject(response.getBody()).get("token_type"));
-            	System.out.println("refresh_token: " + JSON.parseObject(response.getBody()).get("refresh_token"));
-            	System.out.println("expires_in: " + JSON.parseObject(response.getBody()).get("expires_in"));
-            	System.out.println("scope: " + JSON.parseObject(response.getBody()).get("scope"));
+            	System.out.println("token_type: " + jsonObject.get("token_type"));
+            	System.out.println("refresh_token: " + jsonObject.get("refresh_token"));
+            	System.out.println("expires_in: " + jsonObject.get("expires_in"));
+            	System.out.println("scope: " + jsonObject.get("scope"));
             } else {
             	System.out.println("username or password failed");
             }

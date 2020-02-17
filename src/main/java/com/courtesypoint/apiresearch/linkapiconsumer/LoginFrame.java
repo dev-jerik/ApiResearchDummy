@@ -14,7 +14,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
+import kong.unirest.UnirestException;
 
 public class LoginFrame extends JFrame {
 

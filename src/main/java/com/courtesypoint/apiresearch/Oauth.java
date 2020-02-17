@@ -6,10 +6,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Base64;
 
-import com.alibaba.fastjson.JSON;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
+import kong.unirest.HttpResponse;
+import kong.unirest.JsonNode;
+import kong.unirest.Unirest;
+import kong.unirest.UnirestException;
+import kong.unirest.json.JSONObject;
 
 public class Oauth {
     public static void main( String[] args ) throws IOException, UnirestException {
@@ -32,7 +33,7 @@ public class Oauth {
 	    String auth = clientId + ":" + clientSecret;
 	    String authentication = Base64.getEncoder().encodeToString(auth.getBytes());
        
-        HttpResponse<String> response;
+        HttpResponse<JsonNode> response;
         try {
             String url = "https://accounts.google.com/o/oauth2/token";
             response = Unirest.post(url)
@@ -44,14 +45,15 @@ public class Oauth {
 //                    .field("state", "5ca75bd30")
                     .field("redirect_uri", "http://localhost:8080")
                     .field("code", code)
-                    .asString();
+                    .asJson();
             if (response.getStatus() >= 200 && response.getStatus() < 400) {
-            	token = JSON.parseObject(response.getBody()).get("access_token").toString();
+            	JSONObject jsonObject = response.getBody().getObject();
+            	token = jsonObject.get("access_token").toString();
             	System.out.println("access_token: " + token);
-            	System.out.println("token_type: " + JSON.parseObject(response.getBody()).get("token_type"));
-            	System.out.println("refresh_token: " + JSON.parseObject(response.getBody()).get("refresh_token"));
-            	System.out.println("expires_in: " + JSON.parseObject(response.getBody()).get("expires_in"));
-            	System.out.println("scope: " + JSON.parseObject(response.getBody()).get("scope"));
+            	System.out.println("token_type: " + jsonObject.get("token_type"));
+            	System.out.println("refresh_token: " + jsonObject.get("refresh_token"));
+            	System.out.println("expires_in: " + jsonObject.get("expires_in"));
+            	System.out.println("scope: " + jsonObject.get("scope"));
             } else {
             	System.out.println(response.getStatus());
             	System.out.println(response.getBody());
