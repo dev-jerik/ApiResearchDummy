@@ -1,4 +1,4 @@
-package com.courtesypoint.apiresearch;
+package com.courtesypoint.apiresearch.draft;
 
 import java.awt.Desktop;
 import java.io.IOException;

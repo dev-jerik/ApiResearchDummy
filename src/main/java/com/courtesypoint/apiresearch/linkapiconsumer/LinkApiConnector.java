@@ -10,12 +10,12 @@ import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 import kong.unirest.UnirestException;
 
-public class LinkApiConsumer {
+public class LinkApiConnector {
 	
-	private static String linkApiUrl = "http://localhost:8080/link";
+	public static final String LINK_API_URL = "http://localhost:8080/link";
 	
 	public static String getGoogleAuthorizationUrl(String linkApiAccessToken) throws UnirestException {
-		String url = linkApiUrl + "/api/google/getAuthorizationUrl";
+		String url = LINK_API_URL + "/api/google/getAuthorizationUrl";
 		String authorizationUrl = null;
         HttpResponse<String> response = Unirest.get(url)
         		.queryString("access_token", linkApiAccessToken)
@@ -27,7 +27,7 @@ public class LinkApiConsumer {
 	}
 	
 	public static String getGoogleAccessToken(String linkApiAccessToken) {
-		String url = linkApiUrl+ "/api/google/getAccesToken";
+		String url = LINK_API_URL+ "/api/google/getAccesToken";
 		String googleAccessToken = null;
 		try {
 			googleAccessToken = Unirest.get(url)
@@ -42,7 +42,7 @@ public class LinkApiConsumer {
 	}
 	
 	public static String getLinkApiAccessToken(String username, String password) throws UnirestException {
-		String url = linkApiUrl +"/oauth/token";
+		String url = LINK_API_URL +"/oauth/token";
 		String accessToken = connectWithGrantTypePassword(username, password, "cmsApp", "", url);
 		System.out.println("Link API Access Token: " + accessToken);
 		return accessToken;
@@ -68,13 +68,17 @@ public class LinkApiConsumer {
 		return token;
 	}
 	
+	
+	//-------------------------------------------------  --------------------------//
+	
+	
 	public static void main(String[] args){
 		String linkApiAccessToken = null;
 		try {
-			linkApiAccessToken = LinkApiConsumer.getLinkApiAccessToken("Sample", "1234");
+			linkApiAccessToken = LinkApiConnector.getLinkApiAccessToken("Sample", "1234");
 
-			String authorizationUrl = LinkApiConsumer.getGoogleAuthorizationUrl(linkApiAccessToken);
-			LinkApiConsumer.getGoogleAccessToken(linkApiAccessToken);
+			String authorizationUrl = LinkApiConnector.getGoogleAuthorizationUrl(linkApiAccessToken);
+			LinkApiConnector.getGoogleAccessToken(linkApiAccessToken);
 			
 			Desktop d = Desktop.getDesktop();
     	    d.browse(new URI(authorizationUrl));

@@ -1,4 +1,4 @@
-package com.courtesypoint.apiresearch;
+package com.courtesypoint.apiresearch.draft;
 
 import java.io.IOException;
 import java.util.Base64;

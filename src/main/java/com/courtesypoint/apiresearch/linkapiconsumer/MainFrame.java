@@ -48,7 +48,7 @@ public class MainFrame extends JFrame {
 		lblStatus.setBounds(34, 29, 69, 20);
 		contentPane.add(lblStatus);
 		
-		String googleAccessToken = LinkApiConsumer.getGoogleAccessToken(accessToken);
+		String googleAccessToken = LinkApiConnector.getGoogleAccessToken(accessToken);
 		
 		String strGoogleConnectionStatus = "Not Connected!";
 		Color statusColor = Color.RED;
@@ -74,7 +74,7 @@ public class MainFrame extends JFrame {
 		btnGoogle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					String authorizationUrl = LinkApiConsumer.getGoogleAuthorizationUrl(accessToken);
+					String authorizationUrl = LinkApiConnector.getGoogleAuthorizationUrl(accessToken);
 					Desktop d = Desktop.getDesktop();
 		    	    d.browse(new URI(authorizationUrl));
 		    	    
@@ -102,7 +102,7 @@ public class MainFrame extends JFrame {
 		btnRefresh.setVisible(showBtnRefresh);
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String googleAccessToken = LinkApiConsumer.getGoogleAccessToken(accessToken);
+				String googleAccessToken = LinkApiConnector.getGoogleAccessToken(accessToken);
 				
 				String strGoogleConnectionStatus = "Not Connected!";
 				Color statusColor = Color.RED;

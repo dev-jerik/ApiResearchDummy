@@ -1,4 +1,4 @@
-package com.courtesypoint.apiresearch;
+package com.courtesypoint.apiresearch.draft;
 
 
 public class RedmineApi {

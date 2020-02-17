@@ -92,7 +92,7 @@ public class LoginFrame extends JFrame {
 
 	private void login(String username, String password) {
 		try {
-			accessToken = LinkApiConsumer.getLinkApiAccessToken(username, password);
+			accessToken = LinkApiConnector.getLinkApiAccessToken(username, password);
 			if (accessToken != null) {
 				MainFrame mainFrame = new MainFrame(accessToken);
 				mainFrame.setVisible(true);
