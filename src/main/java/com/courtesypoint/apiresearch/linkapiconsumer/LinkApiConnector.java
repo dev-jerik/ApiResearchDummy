@@ -17,6 +17,33 @@ public class LinkApiConnector {
 	
 	public static final String LINK_API_URL = "http://localhost:8080/link";
 	
+	public static void initUnirest() {
+		// Change the default mapper of Unirest from Gson to Jackson.
+		Unirest.config().setObjectMapper(new ObjectMapper() {
+			 com.fasterxml.jackson.databind.ObjectMapper mapper 
+		      = new com.fasterxml.jackson.databind.ObjectMapper();
+			@Override
+			public String writeValue(Object value) {
+				try {
+					return mapper.writeValueAsString(value);
+				} catch (JsonProcessingException e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
+			
+			@Override
+			public <T> T readValue(String value, Class<T> valueType) {
+				try {
+					return mapper.readValue(value, valueType);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
+		});
+	}
+	
 	public static String getGoogleAuthorizationUrl(String linkApiAccessToken) throws UnirestException {
 		String url = LINK_API_URL + "/api/google/getAuthorizationUrl";
 		String authorizationUrl = null;
@@ -45,6 +72,7 @@ public class LinkApiConnector {
 	}
 	
 	public static String getLinkApiAccessToken(String username, String password) throws UnirestException {
+		initUnirest();
 		String url = LINK_API_URL +"/oauth/token";
 		String accessToken = connectWithGrantTypePassword(username, password, "cmsApp", "", url);
 		System.out.println("Link API Access Token: " + accessToken);
@@ -70,9 +98,6 @@ public class LinkApiConnector {
         
 		return token;
 	}
-	
-	
-	//-------------------------------------------------  --------------------------//
 	
 	
 	public static void main(String[] args){
