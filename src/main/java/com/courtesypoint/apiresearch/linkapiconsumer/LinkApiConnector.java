@@ -5,8 +5,11 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
+import kong.unirest.ObjectMapper;
 import kong.unirest.Unirest;
 import kong.unirest.UnirestException;
 
@@ -73,6 +76,7 @@ public class LinkApiConnector {
 	
 	
 	public static void main(String[] args){
+		
 		String linkApiAccessToken = null;
 		try {
 			linkApiAccessToken = LinkApiConnector.getLinkApiAccessToken("Sample", "1234");
