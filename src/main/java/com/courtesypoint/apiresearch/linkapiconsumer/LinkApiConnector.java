@@ -7,21 +7,40 @@ import java.net.URISyntaxException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import kong.unirest.GenericType;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.ObjectMapper;
 import kong.unirest.Unirest;
 import kong.unirest.UnirestException;
+import kong.unirest.UnirestParsingException;
 
 public class LinkApiConnector {
 	
 	public static final String LINK_API_URL = "http://localhost:8080/link";
 	
 	public static void initUnirest() {
-		// Change the default mapper of Unirest from Gson to Jackson.
+		/*
+		 *  Change the default mapper of Unirest from Gson to Jackson.
+		 *  Source: https://www.baeldung.com/unirest		 */
 		Unirest.config().setObjectMapper(new ObjectMapper() {
 			 com.fasterxml.jackson.databind.ObjectMapper mapper 
 		      = new com.fasterxml.jackson.databind.ObjectMapper();
+			
+			/*
+			 * Source: https://github.com/OpenUnirest/object-mappers-jackson
+			 * The source above leads me how to pass the GenericType in readValue() method of Jackson mapper. It happens when I read the source code of JacksonObjectMapper
+			 */
+			 
+			@Override
+			public <T> T readValue(String value, GenericType<T> genericType) {
+				try {
+					return mapper.readValue(value, mapper.constructType(genericType.getType()));
+				} catch (IOException e) {
+					throw new UnirestParsingException(value, e);
+				}
+			}
+
 			@Override
 			public String writeValue(Object value) {
 				try {
@@ -37,9 +56,8 @@ public class LinkApiConnector {
 				try {
 					return mapper.readValue(value, valueType);
 				} catch (IOException e) {
-					e.printStackTrace();
+					throw new UnirestParsingException(value, e);
 				}
-				return null;
 			}
 		});
 	}
