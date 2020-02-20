@@ -12,12 +12,54 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <spring.security.oauth2.version>2.2.1.RELEASE</spring.security.oauth2.version>
+    <jdk.version>1.8</jdk.version>
+    <jackson.version>2.9.4</jackson.version>
   </properties>
   
+  <build>
+    <plugins>
+      <!-- Maven compiler is needed when downloading Spring and commons-logging -->
+  		<plugin>
+  			<inherited>true</inherited>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-compiler-plugin</artifactId>
+  			<version>3.0</version>
+  			<configuration>
+  				<source>${jdk.version}</source>
+  				<target>${jdk.version}</target>
+  				<optimise>true</optimise>
+  				<debug>true</debug>
+  			</configuration>
+  		</plugin>
+    </plugins>
+  </build>
 
   <dependencies>
 	 <!-- https://mvnrepository.com/artifact/com.mashape.unirest/unirest-java -->
+	<dependency>
+		<groupId>org.springframework.security.oauth</groupId>
+		<artifactId>spring-security-oauth2</artifactId>
+		<version>${spring.security.oauth2.version}</version>
+	</dependency>
+	<dependency>
+	    <groupId>com.courtesypoint</groupId>
+	    <artifactId>cms-core</artifactId>
+	    <version>1.5.2</version>
+	</dependency>
 	
+	<dependency>
+	    <groupId>com.fasterxml.jackson.core</groupId>
+	    <artifactId>jackson-core</artifactId>
+	    <version>${jackson.version}</version>
+	</dependency>
+	
+	<dependency>
+           <groupId>com.fasterxml.jackson.core</groupId>
+           <artifactId>jackson-databind</artifactId>
+           <version>${jackson.version}</version>
+       </dependency>
+       
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

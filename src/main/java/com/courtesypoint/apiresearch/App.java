@@ -1,15 +1,25 @@
 package com.courtesypoint.apiresearch;
 
-import java.io.IOException;
+import java.util.List;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
+import com.courtesypoint.json.JsonProfileComplete;
 
-/**
- * Hello world!
- *
- */
 public class App {
-    public static void main( String[] args ) throws IOException, UnirestException {
+	
+    public static void main( String[] args ) {
+    	// Use for log4j
+//    	BasicConfigurator.configure();
     	
+    	LinkApiOperation operation = new LinkApiOperation();
+//    	System.out.println(operation.getProfile());
+    	
+    	String searchProfileNumber = "PR-1055";
+    	System.out.println("List of Profiles");
+    	List<JsonProfileComplete> profiles = operation.searchProfiles(searchProfileNumber);
+    	for(JsonProfileComplete profile : profiles) {
+    		System.out.println(profile);
+    	}
+    	operation.updateProfile(searchProfileNumber);
     }
+ 
 }
