@@ -16,24 +16,8 @@
   
 
   <dependencies>
-	  <!-- https://mvnrepository.com/artifact/com.mashape.unirest/unirest-java -->
-	<dependency>
-	    <groupId>com.mashape.unirest</groupId>
-	    <artifactId>unirest-java</artifactId>
-	    <version>1.4.9</version>
-	</dependency>
-	<dependency>
-	    <groupId>org.apache.httpcomponents</groupId>
-	    <artifactId>httpcore</artifactId>
-	    <version>4.4</version>
-	</dependency>
-	<!-- - -->
-	<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
-	<dependency>
-	    <groupId>com.alibaba</groupId>
-	    <artifactId>fastjson</artifactId>
-	    <version>1.2.62</version>
-	</dependency>
+	 <!-- https://mvnrepository.com/artifact/com.mashape.unirest/unirest-java -->
+	
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
