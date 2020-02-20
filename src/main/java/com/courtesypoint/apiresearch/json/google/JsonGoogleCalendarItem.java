@@ -1,5 +1,8 @@
 package com.courtesypoint.apiresearch.json.google;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class JsonGoogleCalendarItem {
 	private String id;
 	private String summary;

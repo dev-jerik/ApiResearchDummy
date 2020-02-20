@@ -35,7 +35,6 @@ public class LinkApiConnector {
 			@Override
 			public <T> T readValue(String value, GenericType<T> genericType) {
 				try {
-					System.out.println(value);
 					return mapper.readValue(value, mapper.constructType(genericType.getType()));
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -56,7 +55,6 @@ public class LinkApiConnector {
 			@Override
 			public <T> T readValue(String value, Class<T> valueType) {
 				try {
-					System.out.println(value);
 					return mapper.readValue(value, valueType);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -94,7 +92,7 @@ public class LinkApiConnector {
 	}
 	
 	public static String getLinkApiAccessToken(String username, String password) throws UnirestException {
-//		initUnirest();
+		initUnirest();
 		String url = LINK_API_URL +"/oauth/token";
 		String accessToken = connectWithGrantTypePassword(username, password, "cmsApp", "", url);
 		System.out.println("Link API Access Token: " + accessToken);
